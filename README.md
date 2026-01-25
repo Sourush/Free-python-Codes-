@@ -134,8 +134,6 @@ def password_crack():
         glitch()
         pygame.display.update()
         time.sleep(0.15)
-
-# ---------------- MAIN FLOW ----------------
 lines = [
     "Initializing Neural Interface...",
     "Connecting to Secure Server...",
@@ -149,11 +147,8 @@ lines = [
 progress = 0
 y_pos = 100
 
-# LOGIN
 screen.fill(BLACK)
 login_screen()
-
-# PASSWORD CRACK
 password_crack()
 for line in lines:
     typing(line, y_pos)
