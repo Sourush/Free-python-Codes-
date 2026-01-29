@@ -272,15 +272,15 @@ class StudentApp:
         self.label_grade.grid(row=3, column=0, padx=10, pady=5, sticky="w")
         self.entry_grade = tk.Entry(root, **entry_style)
         self.entry_grade.grid(row=3, column=1, padx=10, pady=5)
-        self.add_button = ttk.Button(root, text="➕ Add", style="Accent.TButton", command=self.add_student)
+        self.add_button = ttk.Button(root, text=" Add", style="Accent.TButton", command=self.add_student)
         self.add_button.grid(row=4, column=0, padx=10, pady=10)
-        self.update_button = ttk.Button(root, text="✏️ Update", style="Accent.TButton", command=self.update_student)
+        self.update_button = ttk.Button(root, text=" Update", style="Accent.TButton", command=self.update_student)
         self.update_button.grid(row=4, column=1, padx=10, pady=10)
-        self.delete_button = ttk.Button(root, text="❌ Delete", style="Accent.TButton", command=self.delete_student)
+        self.delete_button = ttk.Button(root, text=" Delete", style="Accent.TButton", command=self.delete_student)
         self.delete_button.grid(row=5, column=0, padx=10, pady=10)
-        self.view_button = ttk.Button(root, text="📋 View", style="Accent.TButton", command=self.view_students)
+        self.view_button = ttk.Button(root, text=" View", style="Accent.TButton", command=self.view_students)
         self.view_button.grid(row=5, column=1, padx=10, pady=10)
-        self.save_button = ttk.Button(root, text="💾 Save", style="Accent.TButton", command=self.save_students)
+        self.save_button = ttk.Button(root, text=" Save", style="Accent.TButton", command=self.save_students)
         self.save_button.grid(row=6, column=0, padx=10, pady=10)
         self.output_text = tk.Text(root, height=12, width=50,
                                    font=("Consolas", 12),
@@ -289,7 +289,7 @@ class StudentApp:
                                    relief="flat")
         self.output_text.grid(row=6, column=1, padx=10, pady=10)
         self.footer_label = tk.Label(root,
-                                     text="Made by Sourush ⚡",
+                                     text="Made by Sourush ",
                                      bg="#12121c", fg="gray",
                                      font=("Arial", 10, "italic"))
         self.footer_label.grid(row=7, column=0, columnspan=2, pady=5)
