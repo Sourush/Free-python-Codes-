@@ -182,3 +182,172 @@ while running:
 
 pygame.quit()
 sys.exit()
+
+
+STUDENT MANAGEMENT SYSTEM ( SMALL DATABASE ) . 
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import ttk
+class Student:
+    def __init__(self, roll_no, name, age, grade):
+        self.roll_no = roll_no
+        self.name = name
+        self.age = age
+        self.grade = grade
+class StudentManagementSystem:
+    def __init__(self):
+        self.students = []
+        self.load_students()
+    def add_student(self, roll_no, name, age, grade):
+        student = Student(roll_no, name, age, grade)
+        self.students.append(student)
+    def update_student(self, roll_no, name=None, age=None, grade=None):
+        for student in self.students:
+            if student.roll_no == roll_no:
+                if name: student.name = name
+                if age: student.age = age
+                if grade: student.grade = grade
+                return True
+        return False
+    def delete_student(self, roll_no):
+        for student in self.students:
+            if student.roll_no == roll_no:
+                self.students.remove(student)
+                return True
+        return False
+    def get_students(self):
+        return [
+            f"Roll No: {s.roll_no} | Name: {s.name} | Age: {s.age} | Grade: {s.grade}"
+            for s in self.students
+        ]
+    def save_students(self):
+        with open("students_data.txt", "w") as file:
+            for s in self.students:
+                file.write(f"{s.roll_no},{s.name},{s.age},{s.grade}\n")
+    def load_students(self):
+        try:
+            with open("students_data.txt", "r") as file:
+                for line in file:
+                    roll_no, name, age, grade = line.strip().split(",")
+                    self.students.append(Student(roll_no, name, int(age), grade))
+        except FileNotFoundError:
+            pass
+class StudentApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("🎓 Student Management System - By Sourush")
+        self.system = StudentManagementSystem()
+        self.root.geometry("750x550")
+        self.root.configure(bg="#12121c")
+        style = ttk.Style()
+        style.theme_use("clam")
+        style.configure("Accent.TButton",
+                        font=("Arial", 12, "bold"),
+                        padding=8,
+                        relief="flat",
+                        background="#2b3a55",   
+                        foreground="white")
+        style.map("Accent.TButton",
+                  background=[("active", "#00d9ff")],
+                  foreground=[("active", "black")])
+        label_style = {"bg": "#12121c", "fg": "white", "font": ("Arial", 12, "bold")}
+        entry_style = {"font": ("Arial", 12),
+                       "bg": "#1c1c2b",
+                       "fg": "white",
+                       "insertbackground": "white",
+                       "relief": "flat"}
+        self.label_roll_no = tk.Label(root, text="Roll No:", **label_style)
+        self.label_roll_no.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+        self.entry_roll_no = tk.Entry(root, **entry_style)
+        self.entry_roll_no.grid(row=0, column=1, padx=10, pady=5)
+        self.label_name = tk.Label(root, text="Name:", **label_style)
+        self.label_name.grid(row=1, column=0, padx=10, pady=5, sticky="w")
+        self.entry_name = tk.Entry(root, **entry_style)
+        self.entry_name.grid(row=1, column=1, padx=10, pady=5)
+        self.label_age = tk.Label(root, text="Age:", **label_style)
+        self.label_age.grid(row=2, column=0, padx=10, pady=5, sticky="w")
+        self.entry_age = tk.Entry(root, **entry_style)
+        self.entry_age.grid(row=2, column=1, padx=10, pady=5)
+        self.label_grade = tk.Label(root, text="Grade:", **label_style)
+        self.label_grade.grid(row=3, column=0, padx=10, pady=5, sticky="w")
+        self.entry_grade = tk.Entry(root, **entry_style)
+        self.entry_grade.grid(row=3, column=1, padx=10, pady=5)
+        self.add_button = ttk.Button(root, text="➕ Add", style="Accent.TButton", command=self.add_student)
+        self.add_button.grid(row=4, column=0, padx=10, pady=10)
+        self.update_button = ttk.Button(root, text="✏️ Update", style="Accent.TButton", command=self.update_student)
+        self.update_button.grid(row=4, column=1, padx=10, pady=10)
+        self.delete_button = ttk.Button(root, text="❌ Delete", style="Accent.TButton", command=self.delete_student)
+        self.delete_button.grid(row=5, column=0, padx=10, pady=10)
+        self.view_button = ttk.Button(root, text="📋 View", style="Accent.TButton", command=self.view_students)
+        self.view_button.grid(row=5, column=1, padx=10, pady=10)
+        self.save_button = ttk.Button(root, text="💾 Save", style="Accent.TButton", command=self.save_students)
+        self.save_button.grid(row=6, column=0, padx=10, pady=10)
+        self.output_text = tk.Text(root, height=12, width=50,
+                                   font=("Consolas", 12),
+                                   bg="#1c1c2b", fg="#00d9ff",
+                                   insertbackground="white",
+                                   relief="flat")
+        self.output_text.grid(row=6, column=1, padx=10, pady=10)
+        self.footer_label = tk.Label(root,
+                                     text="Made by Sourush ⚡",
+                                     bg="#12121c", fg="gray",
+                                     font=("Arial", 10, "italic"))
+        self.footer_label.grid(row=7, column=0, columnspan=2, pady=5)
+    def add_student(self):
+        roll_no = self.entry_roll_no.get()
+        name = self.entry_name.get()
+        age = self.entry_age.get()
+        grade = self.entry_grade.get()
+        if not roll_no or not name or not age or not grade:
+            messagebox.showerror("Input Error", "All fields must be filled!")
+            return
+        self.system.add_student(roll_no, name, age, grade)
+        messagebox.showinfo("Success", "Student added successfully!")
+        self.clear_inputs()
+    def update_student(self):
+        roll_no = self.entry_roll_no.get()
+        name = self.entry_name.get()
+        age = self.entry_age.get()
+        grade = self.entry_grade.get()
+        if not roll_no:
+            messagebox.showerror("Input Error", "Roll number is required to update!")
+            return
+        if self.system.update_student(roll_no, name, age, grade):
+            messagebox.showinfo("Success", "Student updated successfully!")
+        else:
+            messagebox.showerror("Error", f"No student found with roll number {roll_no}")
+        self.clear_inputs()
+    def delete_student(self):
+        roll_no = self.entry_roll_no.get()
+        if not roll_no:
+            messagebox.showerror("Input Error", "Roll number is required to delete!")
+            return
+        if self.system.delete_student(roll_no):
+            messagebox.showinfo("Success", "Student deleted successfully!")
+        else:
+            messagebox.showerror("Error", f"No student found with roll number {roll_no}")
+        self.clear_inputs()
+    def view_students(self):
+        students = self.system.get_students()
+        self.output_text.delete(1.0, tk.END)
+        if not students:
+            self.output_text.insert(tk.END, "No students available.\n")
+        else:
+            for student in students:
+                self.output_text.insert(tk.END, student + "\n")
+    def save_students(self):
+        self.system.save_students()
+        messagebox.showinfo("Success", "Students saved successfully!")
+    def clear_inputs(self):
+        self.entry_roll_no.delete(0, tk.END)
+        self.entry_name.delete(0, tk.END)
+        self.entry_age.delete(0, tk.END)
+        self.entry_grade.delete(0, tk.END)
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = StudentApp(root)
+    for i in range(8):  
+        root.grid_rowconfigure(i, weight=1)
+    for j in range(2):
+        root.grid_columnconfigure(j, weight=1)
+    root.mainloop()
